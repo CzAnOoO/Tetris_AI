@@ -12,6 +12,7 @@ if __name__ == "__main__":
 
     # Main game loop
     terminated = False
+    last_score = 0
     while not terminated:
         # Render the current state of the game as text
         env.render()
@@ -47,6 +48,10 @@ if __name__ == "__main__":
 
         # Perform the action
         observation, reward, terminated, truncated, info = env.step(action)
+        current_score = info.get("lines_cleared", 0)
+        if current_score != last_score:
+            print("Score:", current_score)
+            last_score = current_score
 
     # Game over
     print("Game Over!")
