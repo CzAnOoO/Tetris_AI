@@ -4,9 +4,10 @@ import gymnasium as gym
 from tetris_gymnasium.envs.tetris import Tetris
 from tetris_gymnasium.mappings.rewards import RewardsMapping
 from tetris_gymnasium.wrappers.observation import FeatureVectorObservation
+from envs.reward import MyReward
 
 my_rewards = RewardsMapping(
-    alife=0.01, clear_line=20.0, game_over=-1.0, invalid_action=-0.1
+    alife=0.1, clear_line=50.0, game_over=-10.0, invalid_action=-0.1
 )
 
 
@@ -17,6 +18,7 @@ def make_env(render=False, seed=None):
         rewards_mapping=my_rewards,
     )
     env = FeatureVectorObservation(env)
+    env = MyReward(env)
     if seed is not None:
         env.reset(seed=seed)
     return env

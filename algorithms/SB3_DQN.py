@@ -3,9 +3,10 @@ from stable_baselines3 import DQN
 
 env = tetris_env.make_env(False)
 # print(env.observation_space)
-model = DQN("MultiInputPolicy", env, verbose=1)
-model.learn(total_timesteps=10000000, log_interval=10000)
-model.save("models/dqn_1")
+model = DQN("MlpPolicy", env, verbose=1)
+# model = DQN("MultiInputPolicy", env, verbose=1)
+model.learn(total_timesteps=5000000, log_interval=1000)
+model.save("models/dqn_my_r2")
 
 # del model  # remove to demonstrate saving and loading
 
