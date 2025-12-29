@@ -3,6 +3,7 @@ import gymnasium as gym
 
 from tetris_gymnasium.envs.tetris import Tetris
 from tetris_gymnasium.mappings.rewards import RewardsMapping
+from tetris_gymnasium.wrappers.observation import FeatureVectorObservation
 
 my_rewards = RewardsMapping(
     alife=0.01, clear_line=20.0, game_over=-1.0, invalid_action=-0.1
@@ -15,6 +16,7 @@ def make_env(render=False, seed=None):
         render_mode="human" if render else None,
         rewards_mapping=my_rewards,
     )
+    env = FeatureVectorObservation(env)
     if seed is not None:
         env.reset(seed=seed)
     return env
@@ -53,7 +55,7 @@ if __name__ == "__main__":
         # action = FROM AGENT
         observation, reward, terminated, truncated, info = env.step(action)
 
-        key = cv2.waitKey(100)  # timeout to see the movement
+        key = cv2.waitKey(1000)  # timeout to see the movement
         current_score = info.get("lines_cleared", 0)
         if current_score != last_score:
             print("Score:", current_score)
