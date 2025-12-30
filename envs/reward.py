@@ -22,6 +22,10 @@ class MyReward(gym.Wrapper):
     def step(self, action):
         obs, reward, term, trun, info = self.env.step(action)
 
+        lines_cleared = info.get("lines_cleared", 0)
+        if lines_cleared > 0:
+            reward += (lines_cleared**1.5) * 50
+
         """
         https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/wrappers/observation.py#L114
         observation space is 1D vector "obs": 
@@ -40,12 +44,12 @@ class MyReward(gym.Wrapper):
             d_holes = holes - self.prev_holes
             d_bump = bumpiness - self.prev_bumpiness
 
-            reward += -0.5 * d_holes - 0.01 * d_bump
+            reward += -0.05 * d_height - 1.5 * d_holes - 0.01 * d_bump
             self.prev_max_height = max_height
             self.prev_holes = holes
             self.prev_bumpiness = bumpiness
             if d_holes == 0:
-                reward += 10
+                reward += 30
                 # print("0 delta hole")
 
         if action == 6:  # swap
