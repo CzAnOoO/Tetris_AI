@@ -4,12 +4,12 @@ import cv2
 import gymnasium as gym
 
 from tetris_gymnasium.envs import Tetris
-# from envs import tetris_env
+from envs import tetris_env
 
 if __name__ == "__main__":
     # Create an instance of Tetris
-    env = gym.make("tetris_gymnasium/Tetris", render_mode="human")
-    # env = tetris_env.make_env()
+    # env = gym.make("tetris_gymnasium/Tetris", render_mode="human")
+    env = tetris_env.make_env(True)
     env.reset(seed=42)
 
     # Main game loop
@@ -38,6 +38,8 @@ if __name__ == "__main__":
                 action = env.unwrapped.actions.hard_drop
             elif key == ord("q"):
                 action = env.unwrapped.actions.swap
+            elif key == ord("1"):
+                action = env.unwrapped.actions.no_op
             elif key == ord("r"):
                 env.reset(seed=42)
                 break
@@ -50,7 +52,8 @@ if __name__ == "__main__":
 
         # Perform the action
         observation, reward, terminated, truncated, info = env.step(action)
-        print(info)
+        print(observation)
+        print(reward)
         current_score = info.get("lines_cleared", 0)
         if current_score != last_score:
             print("Score:", current_score)

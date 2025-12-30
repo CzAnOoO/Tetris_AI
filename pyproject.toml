@@ -7,5 +7,6 @@ requires-python = ">=3.10"
 dependencies = [
     "opencv-python>=4.11.0.86",
     "stable-baselines3>=2.7.1",
+    "tensorboard>=2.20.0",
     "tetris-gymnasium>=0.3.0",
 ]

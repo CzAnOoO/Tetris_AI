@@ -5,9 +5,10 @@ from tetris_gymnasium.envs.tetris import Tetris
 from tetris_gymnasium.mappings.rewards import RewardsMapping
 from tetris_gymnasium.wrappers.observation import FeatureVectorObservation
 from envs.reward import MyReward
+from envs.obs import ExtendObervation
 
 my_rewards = RewardsMapping(
-    alife=0.1, clear_line=50.0, game_over=-10.0, invalid_action=-0.1
+    alife=0.1, clear_line=800.0, game_over=-100.0, invalid_action=-0.1
 )
 
 
@@ -18,6 +19,7 @@ def make_env(render=False, seed=None):
         rewards_mapping=my_rewards,
     )
     env = FeatureVectorObservation(env)
+    env = ExtendObervation(env)
     env = MyReward(env)
     if seed is not None:
         env.reset(seed=seed)
