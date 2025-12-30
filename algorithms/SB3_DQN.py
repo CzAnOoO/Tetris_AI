@@ -6,7 +6,7 @@ log_dir = "logs"
 env = tetris_env.make_env(False)
 # print(env.observation_space)
 model = DQN(
-    "MlpPolicy",
+    "MultiInputPolicy",
     env,
     verbose=1,
     tensorboard_log=log_dir,
@@ -14,8 +14,8 @@ model = DQN(
     exploration_fraction=0.2,
 )
 # model = DQN("MultiInputPolicy", env, verbose=1)
-model.learn(total_timesteps=50000000, log_interval=10000)
-model.save("models/dqn_my_plz")
+model.learn(total_timesteps=50_000_000, log_interval=1000, tb_log_name="DQN_50M_dict")
+model.save("models/dqn_50M_dict")
 
 # del model  # remove to demonstrate saving and loading
 

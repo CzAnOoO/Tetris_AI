@@ -8,7 +8,7 @@ from envs.reward import MyReward
 from envs.obs import ExtendObervation
 
 my_rewards = RewardsMapping(
-    alife=0.1, clear_line=10.0, game_over=-100.0, invalid_action=-0.1
+    alife=0.1, clear_line=80.0, game_over=-20.0, invalid_action=-0.1
 )
 
 
