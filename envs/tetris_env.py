@@ -47,7 +47,7 @@ def play(env, agent=None, delay=100, episodes=1):
                 # print("Lines cleared: ", lines_cleared)
             cv2.waitKey(delay)
 
-        print("Game Over!")
+        # print("Game Over!")
         scores.append(current_game_score)
 
     mean_score = np.mean(scores)
