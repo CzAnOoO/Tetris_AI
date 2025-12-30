@@ -10,7 +10,7 @@ class MyReward(gym.Wrapper):
         self.prev_max_height = None
         self.prev_holes = None
         self.prev_bumpiness = None
-        self.alife_p = env.unwrapped.rewards.alife
+        # self.alife_p = env.unwrapped.rewards.alife
 
         # self.prev_state = None
 
@@ -50,7 +50,7 @@ class MyReward(gym.Wrapper):
         bumpiness = obs[12]
 
         # when the block is placed
-        if reward == self.alife_p:
+        if reward > 0:
             # delta
             d_height = max_height - self.prev_max_height
             d_holes = holes - self.prev_holes
