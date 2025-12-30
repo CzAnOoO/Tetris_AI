@@ -1,5 +1,6 @@
 import gymnasium as gym
 from tetris_gymnasium.mappings.rewards import RewardsMapping
+import numpy as np
 
 
 # https://gymnasium.farama.org/api/wrappers/#methods
@@ -9,14 +10,24 @@ class MyReward(gym.Wrapper):
         self.prev_max_height = None
         self.prev_holes = None
         self.prev_bumpiness = None
+        self.alife_p = env.unwrapped.rewards.alife
+
+        # self.prev_state = None
 
     # https://stackoverflow.com/questions/73675262/openai-gym-problem-override-observationwrapper-reset-method
     def reset(self, **kwargs):
         obs, info = self.env.reset(**kwargs)
-
+        # data from the last block placement
         self.prev_max_height = obs[10]
         self.prev_holes = obs[11]
         self.prev_bumpiness = obs[12]
+        # ata from the last place step
+        self.last_holes = obs[11]
+        self.last_bumpiness = obs[12]
+
+        self.prev_state = np.zeros(10)
+        # obs = np.concatenate([obs, self.prev_state])
+
         return obs, info
 
     def step(self, action):
@@ -34,23 +45,37 @@ class MyReward(gym.Wrapper):
         - The number of holes : obs[11]
         - The bumpiness : obs[12]
         """
+        max_height = obs[10]
+        holes = obs[11]
+        bumpiness = obs[12]
 
-        if reward != 0:
-            max_height = obs[10]
-            holes = obs[11]
-            bumpiness = obs[12]
+        # when the block is placed
+        if reward == self.alife_p:
             # delta
             d_height = max_height - self.prev_max_height
             d_holes = holes - self.prev_holes
             d_bump = bumpiness - self.prev_bumpiness
 
-            reward += -0.05 * d_height - 1.5 * d_holes - 0.01 * d_bump
+            reward += -0.3 * d_height - 2 * d_holes - 0.3 * d_bump
             self.prev_max_height = max_height
             self.prev_holes = holes
             self.prev_bumpiness = bumpiness
             if d_holes == 0:
                 reward += 30
                 # print("0 delta hole")
+            if self.env.obs_size == 26:
+                self.env.prev_state = obs[:10]
+                obs[-10:] = self.env.prev_state
+
+        # when the block is in the air
+        if reward == 0:
+            d_holes = holes - self.last_holes
+            d_bump = bumpiness - self.last_bumpiness
+
+            reward += -0.02 * d_holes - 0.1 * d_bump
+
+            self.last_holes = holes
+            self.last_bumpiness = bumpiness
 
         if action == 6:  # swap
             reward -= 0.5

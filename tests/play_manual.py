@@ -11,6 +11,7 @@ if __name__ == "__main__":
     # env = gym.make("tetris_gymnasium/Tetris", render_mode="human")
     env = tetris_env.make_env(True)
     env.reset(seed=42)
+    # print(env.unwrapped.rewards.game_over)
 
     # Main game loop
     terminated = False
@@ -38,8 +39,6 @@ if __name__ == "__main__":
                 action = env.unwrapped.actions.hard_drop
             elif key == ord("q"):
                 action = env.unwrapped.actions.swap
-            elif key == ord("1"):
-                action = env.unwrapped.actions.no_op
             elif key == ord("r"):
                 env.reset(seed=42)
                 break

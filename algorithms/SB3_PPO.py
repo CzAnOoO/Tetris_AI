@@ -13,5 +13,5 @@ model = PPO(
     tensorboard_log=log_dir,
 )
 
-model.learn(total_timesteps=100_000_000, tb_log_name="PPO_100M_non-L")
-model.save("models/ppo_100M_non-L")
+model.learn(total_timesteps=20_000_000, tb_log_name="PPO_50M_NL_A_26")
+model.save("models/ppo_50M_NL_A_26")

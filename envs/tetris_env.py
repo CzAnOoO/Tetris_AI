@@ -6,45 +6,53 @@ from tetris_gymnasium.mappings.rewards import RewardsMapping
 from tetris_gymnasium.wrappers.observation import FeatureVectorObservation
 from envs.reward import MyReward
 from envs.obs import ExtendObervation
+import numpy as np
 
 my_rewards = RewardsMapping(
     alife=0.1, clear_line=80.0, game_over=-20.0, invalid_action=-0.1
 )
 
 
-def make_env(render=False, seed=None):
+def make_env(render=False, seed=None, obs_size=16):
     env = gym.make(
         "tetris_gymnasium/Tetris",
         render_mode="human" if render else None,
         rewards_mapping=my_rewards,
     )
     env = FeatureVectorObservation(env)
-    env = ExtendObervation(env)
+    env = ExtendObervation(env, obs_size)
     env = MyReward(env)
     if seed is not None:
         env.reset(seed=seed)
     return env
 
 
-def play(env, agent=None, delay=100):
-    obs, info = env.reset()
-    terminated = False
-    truncated = False
-    last_score = 0
+def play(env, agent=None, delay=100, episodes=1):
+    scores = []
+    for episode in range(episodes):
+        obs, info = env.reset()
+        terminated = False
+        truncated = False
+        current_game_score = 0
 
-    while not (terminated or truncated):
-        env.render()
+        while not (terminated or truncated):
+            env.render()
 
-        action, _states = agent.predict(obs, deterministic=True)
-        obs, reward, terminated, truncated, info = env.step(action)
+            action, _states = agent.predict(obs, deterministic=True)
+            obs, reward, terminated, truncated, info = env.step(action)
 
-        current_score = info.get("lines_cleared", 0)
-        if current_score != 0:
-            print("Lines cleared: ", current_score)
-            # last_score = current_score
-        cv2.waitKey(delay)
+            lines_cleared = info.get("lines_cleared", 0)
+            if lines_cleared != 0:
+                current_game_score += lines_cleared
+                # print("Lines cleared: ", lines_cleared)
+            cv2.waitKey(delay)
 
-    print("Game Over!")
+        print("Game Over!")
+        scores.append(current_game_score)
+
+    mean_score = np.mean(scores)
+    print("episodes: ", episodes)
+    print("avg score: ", mean_score)
 
 
 if __name__ == "__main__":

@@ -4,10 +4,14 @@ from gymnasium import spaces
 
 
 class ExtendObervation(gym.ObservationWrapper):
-    def __init__(self, env):
+    def __init__(self, env, obs_size):
         super().__init__(env)
+        self.obs_size = obs_size
+        self.prev_state = np.zeros(
+            10
+        )  # state when the block was last placed (the height of the stack in each column)
         self.observation_space = spaces.Box(
-            low=-np.inf, high=np.inf, shape=(16,), dtype=np.float32
+            low=-np.inf, high=np.inf, shape=(obs_size,), dtype=np.float32
         )
 
     def observation(self, observation):
@@ -21,6 +25,9 @@ class ExtendObervation(gym.ObservationWrapper):
         id = active_tetromino.id
         # matrix = active_tetromino.matrix
 
-        obs = np.concatenate([basic, [x, y, id]])
+        if self.obs_size == 16:
+            obs = np.concatenate([basic, [x, y, id]])
+        else:
+            obs = np.concatenate([basic, [x, y, id], self.prev_state])
 
         return obs
