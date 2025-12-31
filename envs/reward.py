@@ -73,10 +73,11 @@ class MyReward(gym.Wrapper):
 
             self.env.prev_state = obs[:10]
 
-            if self.env.obs_size == 26 or self.env.obs_size == 32:
+            if self.env.obs_size in (26, 32):
                 obs[-10:] = self.env.prev_state
 
-        obs[:10] = self.env.prev_state
+        if self.env.obs_size not in (26, 32):
+            obs[:10] = self.env.prev_state
 
         # # when the block is in the air
         # """ if reward == 0:
