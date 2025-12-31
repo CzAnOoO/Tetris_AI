@@ -52,7 +52,8 @@ if __name__ == "__main__":
         # Perform the action
         observation, reward, terminated, truncated, info = env.step(action)
         # print(observation)
-        print(reward)
+        # print(reward)
+        print(observation[15])
         """ current_score = info.get("lines_cleared", 0)
         if current_score != 0:
             print("Score:", current_score) """

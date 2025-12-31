@@ -22,16 +22,22 @@ class ExtendObservation(gym.ObservationWrapper):
         y = root.y
 
         active_tetromino = root.active_tetromino
-        id = active_tetromino.id
+        id_index = active_tetromino.id  # 2 - 8 = 7 st
         # matrix = active_tetromino.matrix
+        id = np.zeros(7)
+        id[id_index - 2]
 
-        if self.obs_size == 16:
-            obs = np.concatenate([basic, [x, y, id]]).astype(np.float32)
+        xy = [x / 10.0, y / 20.0]
+        id_val = [(id_index - 2) / 6]
+        if self.obs_size == 22:
+            pieces = [basic / 20.0, xy, id]
+        elif self.obs_size == 16:
+            pieces = [basic / 20.0, xy, id_val]
+        elif self.obs_size == 32:
+            pieces = [basic / 20.0, xy, id, self.prev_state / 20]
         else:
-            obs = np.concatenate([basic, [x, y, id], self.prev_state]).astype(
-                np.float32
-            )
+            pieces = [basic / 20.0, xy, id_val, self.prev_state / 20]
 
-        obs /= 20
+        obs = np.concatenate(pieces).astype(np.float32)
 
         return obs

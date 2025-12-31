@@ -9,7 +9,7 @@ from envs.obs import ExtendObservation
 import numpy as np
 
 my_rewards = RewardsMapping(
-    alife=0.01, clear_line=5, game_over=-3, invalid_action=-0.01
+    alife=0.05, clear_line=1, game_over=-10, invalid_action=-0.01
 )
 
 
@@ -55,21 +55,21 @@ def play(env, agent=None, delay=100, episodes=1):
     print("avg score: ", mean_score)
 
 
-if __name__ == "__main__":
-    # Step 1
-    env = make_env(True, 42)
+# if __name__ == "__main__":
+#     # Step 1
+#     env = make_env(True, 42)
 
-    terminated = False
-    last_score = 0
-    while not terminated:
-        env.render()
-        # Step 2: run a agent
-        # action = FROM AGENT
-        observation, reward, terminated, truncated, info = env.step(action)
+#     terminated = False
+#     last_score = 0
+#     while not terminated:
+#         env.render()
+#         # Step 2: run a agent
+#         # action = FROM AGENT
+#         observation, reward, terminated, truncated, info = env.step(action)
 
-        key = cv2.waitKey(1000)  # timeout to see the movement
-        current_score = info.get("lines_cleared", 0)
-        if current_score != last_score:
-            print("Score:", current_score)
-            last_score = current_score
-    print("Game Over!")
+#         key = cv2.waitKey(1000)  # timeout to see the movement
+#         current_score = info.get("lines_cleared", 0)
+#         if current_score != last_score:
+#             print("Score:", current_score)
+#             last_score = current_score
+#     print("Game Over!")

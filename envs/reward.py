@@ -40,7 +40,7 @@ class MyReward(gym.Wrapper):
             return (rows_cleared**2) * self.width """
         if lines_cleared > 0:
             # reward /= 10
-            reward = (lines_cleared**2) * 0.2
+            reward = (lines_cleared**2) * 1
             # print("lines_creared: ", lines_cleared)
 
         """
@@ -70,11 +70,12 @@ class MyReward(gym.Wrapper):
             if d_holes == 0:
                 reward += 0.3
                 # print("0 delta hole")
-            if self.env.obs_size == 26:
-                self.env.prev_state = obs[:10]
+
+            self.env.prev_state = obs[:10]
+
+            if self.env.obs_size == 26 or self.env.obs_size == 32:
                 obs[-10:] = self.env.prev_state
-            else:
-                self.env.prev_state = obs[:10]
+
         obs[:10] = self.env.prev_state
 
         # # when the block is in the air
