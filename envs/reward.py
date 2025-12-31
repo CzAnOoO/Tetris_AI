@@ -33,16 +33,6 @@ class MyReward(gym.Wrapper):
     def step(self, action):
         obs, reward, term, trun, info = self.env.step(action)
 
-        lines_cleared = info.get("lines_cleared", 0)
-
-        """ https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/envs/tetris.py
-        def score(self, rows_cleared) -> int:
-            return (rows_cleared**2) * self.width """
-        if lines_cleared > 0:
-            # reward /= 10
-            reward = (lines_cleared**2) * 1
-            # print("lines_creared: ", lines_cleared)
-
         """
         https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/wrappers/observation.py#L114
         observation space is 1D vector "obs":
@@ -57,20 +47,21 @@ class MyReward(gym.Wrapper):
 
         # when the block is placed
         if reward > 0:
-            # delta
+            # delta (have all been divided by 20 in the observation function)
             d_holes = holes - self.prev_holes
+            d_bump = bumpiness - self.prev_bumpiness
             # d_height = max_height - self.prev_max_height
-            # d_bump = bumpiness - self.prev_bumpiness
 
             # reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
-            # reward += -0.005 * d_holes - 0.005 * d_bump
+            reward += -0.8 * d_holes  # - 0.005 * d_bump
             # self.prev_max_height = max_height
             # self.prev_bumpiness = bumpiness
             self.prev_holes = holes
             if d_holes == 0:
-                reward += 0.3
+                reward += 0.5
                 # print("0 delta hole")
 
+            # print("delta hole: ", d_holes)
             self.env.prev_state = obs[:10]
 
             if self.env.obs_size in (26, 32):
@@ -78,6 +69,15 @@ class MyReward(gym.Wrapper):
 
         if self.env.obs_size not in (26, 32):
             obs[:10] = self.env.prev_state
+
+        lines_cleared = info.get("lines_cleared", 0)
+        """ https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/envs/tetris.py
+        def score(self, rows_cleared) -> int:
+            return (rows_cleared**2) * self.width """
+        if lines_cleared > 0:
+            # reward /= 10
+            reward = (lines_cleared**1.8) * 1 + 1
+            # print("lines_creared: ", lines_cleared)
 
         # # when the block is in the air
         # """ if reward == 0:

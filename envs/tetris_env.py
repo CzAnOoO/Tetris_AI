@@ -27,7 +27,7 @@ def make_env(render=False, seed=None, obs_size=16):
     return env
 
 
-def play(env, agent=None, delay=100, episodes=1):
+def play(env, agent=None, delay=100, episodes=1, render=False):
     scores = []
     for episode in range(episodes):
         obs, info = env.reset()
@@ -36,7 +36,9 @@ def play(env, agent=None, delay=100, episodes=1):
         current_game_score = 0
 
         while not (terminated or truncated):
-            env.render()
+            if render:
+                env.render()
+                cv2.waitKey(delay)
 
             action, _states = agent.predict(obs, deterministic=True)
             obs, reward, terminated, truncated, info = env.step(action)
@@ -44,8 +46,7 @@ def play(env, agent=None, delay=100, episodes=1):
             lines_cleared = info.get("lines_cleared", 0)
             if lines_cleared != 0:
                 current_game_score += lines_cleared
-                print("Lines cleared: ", lines_cleared)
-            cv2.waitKey(delay)
+            #     print("Lines cleared: ", lines_cleared)
 
         # print("Game Over!")
         scores.append(current_game_score)
