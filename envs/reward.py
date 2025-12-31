@@ -33,6 +33,18 @@ class MyReward(gym.Wrapper):
     def step(self, action):
         obs, reward, term, trun, info = self.env.step(action)
 
+        """ https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/envs/tetris.py
+        def score(self, rows_cleared) -> int:
+            return (rows_cleared**2) * self.width """
+        if reward > 1:
+            reward = 0.01
+
+        lines_cleared = info.get("lines_cleared", 0)
+        if lines_cleared > 0:
+            # reward /= 10
+            reward += (lines_cleared**2) * 1  # + 1
+            # print("lines_creared: ", lines_cleared)
+
         """
         https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/wrappers/observation.py#L114
         observation space is 1D vector "obs":
@@ -53,13 +65,13 @@ class MyReward(gym.Wrapper):
             # d_height = max_height - self.prev_max_height
 
             # reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
-            reward += -0.8 * d_holes  # - 0.005 * d_bump
+            reward += -0.5 * d_holes  # - 0.005 * d_bump
             # self.prev_max_height = max_height
             # self.prev_bumpiness = bumpiness
             self.prev_holes = holes
             if d_holes == 0:
-                reward += 0.5
-                # print("0 delta hole")
+                reward += 0.01
+            # print("0 delta hole")
 
             # print("delta hole: ", d_holes)
             self.env.prev_state = obs[:10]
@@ -69,15 +81,6 @@ class MyReward(gym.Wrapper):
 
         if self.env.obs_size not in (26, 32):
             obs[:10] = self.env.prev_state
-
-        lines_cleared = info.get("lines_cleared", 0)
-        """ https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/envs/tetris.py
-        def score(self, rows_cleared) -> int:
-            return (rows_cleared**2) * self.width """
-        if lines_cleared > 0:
-            # reward /= 10
-            reward = (lines_cleared**1.8) * 1 + 1
-            # print("lines_creared: ", lines_cleared)
 
         # # when the block is in the air
         # """ if reward == 0:
