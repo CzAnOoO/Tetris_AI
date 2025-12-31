@@ -9,7 +9,7 @@ from envs.obs import ExtendObservation
 import numpy as np
 
 my_rewards = RewardsMapping(
-    alife=0.01, clear_line=5, game_over=-5, invalid_action=-0.01
+    alife=0.01, clear_line=5, game_over=-3, invalid_action=-0.01
 )
 
 

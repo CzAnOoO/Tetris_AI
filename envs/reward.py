@@ -59,13 +59,13 @@ class MyReward(gym.Wrapper):
         if reward > 0:
             # delta
             d_holes = holes - self.prev_holes
-            d_height = max_height - self.prev_max_height
-            d_bump = bumpiness - self.prev_bumpiness
+            # d_height = max_height - self.prev_max_height
+            # d_bump = bumpiness - self.prev_bumpiness
 
-            reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
-            reward += -0.001 * d_holes - 0.001 * d_bump
-            self.prev_max_height = max_height
-            self.prev_bumpiness = bumpiness
+            # reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
+            # reward += -0.005 * d_holes - 0.005 * d_bump
+            # self.prev_max_height = max_height
+            # self.prev_bumpiness = bumpiness
             self.prev_holes = holes
             if d_holes == 0:
                 reward += 0.3
