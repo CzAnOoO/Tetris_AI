@@ -51,12 +51,11 @@ if __name__ == "__main__":
 
         # Perform the action
         observation, reward, terminated, truncated, info = env.step(action)
-        print(observation)
+        # print(observation)
         print(reward)
-        current_score = info.get("lines_cleared", 0)
-        if current_score != last_score:
-            print("Score:", current_score)
-            last_score = current_score
+        """ current_score = info.get("lines_cleared", 0)
+        if current_score != 0:
+            print("Score:", current_score) """
 
     # Game over
     print("Game Over!")

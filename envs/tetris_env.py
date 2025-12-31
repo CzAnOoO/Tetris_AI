@@ -5,11 +5,11 @@ from tetris_gymnasium.envs.tetris import Tetris
 from tetris_gymnasium.mappings.rewards import RewardsMapping
 from tetris_gymnasium.wrappers.observation import FeatureVectorObservation
 from envs.reward import MyReward
-from envs.obs import ExtendObervation
+from envs.obs import ExtendObservation
 import numpy as np
 
 my_rewards = RewardsMapping(
-    alife=0.1, clear_line=80.0, game_over=-20.0, invalid_action=-0.1
+    alife=0.01, clear_line=5, game_over=-5, invalid_action=-0.01
 )
 
 
@@ -20,7 +20,7 @@ def make_env(render=False, seed=None, obs_size=16):
         rewards_mapping=my_rewards,
     )
     env = FeatureVectorObservation(env)
-    env = ExtendObervation(env, obs_size)
+    env = ExtendObservation(env, obs_size)
     env = MyReward(env)
     if seed is not None:
         env.reset(seed=seed)
@@ -44,7 +44,7 @@ def play(env, agent=None, delay=100, episodes=1):
             lines_cleared = info.get("lines_cleared", 0)
             if lines_cleared != 0:
                 current_game_score += lines_cleared
-                # print("Lines cleared: ", lines_cleared)
+                print("Lines cleared: ", lines_cleared)
             cv2.waitKey(delay)
 
         # print("Game Over!")

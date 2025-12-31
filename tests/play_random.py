@@ -12,8 +12,9 @@ if __name__ == "__main__":
         observation, reward, terminated, truncated, info = env.step(action)
         key = cv2.waitKey(100)  # timeout to see the movement
         # print(info.get("lines_cleared", 0))
-        print(reward)
-        print(observation)
+        if reward != 0:
+            print(reward)
+        # print(observation)
         current_score = info.get("lines_cleared", 0)
         if current_score != last_score:
             print("Score:", current_score)

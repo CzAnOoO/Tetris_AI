@@ -34,12 +34,18 @@ class MyReward(gym.Wrapper):
         obs, reward, term, trun, info = self.env.step(action)
 
         lines_cleared = info.get("lines_cleared", 0)
+
+        """ https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/envs/tetris.py
+        def score(self, rows_cleared) -> int:
+            return (rows_cleared**2) * self.width """
         if lines_cleared > 0:
-            reward += (lines_cleared**1.5) * 50
+            # reward /= 10
+            reward = (lines_cleared**2) * 0.2
+            # print("lines_creared: ", lines_cleared)
 
         """
         https://github.com/Max-We/Tetris-Gymnasium/blob/main/tetris_gymnasium/wrappers/observation.py#L114
-        observation space is 1D vector "obs": 
+        observation space is 1D vector "obs":
         - The height of each column: obs[0...9]
         - The maximum height : obs[10]
         - The number of holes : obs[11]
@@ -52,34 +58,39 @@ class MyReward(gym.Wrapper):
         # when the block is placed
         if reward > 0:
             # delta
-            d_height = max_height - self.prev_max_height
             d_holes = holes - self.prev_holes
+            d_height = max_height - self.prev_max_height
             d_bump = bumpiness - self.prev_bumpiness
 
-            reward += -0.3 * d_height - 2 * d_holes - 0.3 * d_bump
+            reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
+            reward += -0.001 * d_holes - 0.001 * d_bump
             self.prev_max_height = max_height
-            self.prev_holes = holes
             self.prev_bumpiness = bumpiness
+            self.prev_holes = holes
             if d_holes == 0:
-                reward += 30
+                reward += 0.3
                 # print("0 delta hole")
             if self.env.obs_size == 26:
                 self.env.prev_state = obs[:10]
                 obs[-10:] = self.env.prev_state
+            else:
+                self.env.prev_state = obs[:10]
+        obs[:10] = self.env.prev_state
 
-        # when the block is in the air
-        if reward == 0:
-            d_holes = holes - self.last_holes
-            d_bump = bumpiness - self.last_bumpiness
+        # # when the block is in the air
+        # """ if reward == 0:
+        #     d_holes = holes - self.last_holes
+        #     d_bump = bumpiness - self.last_bumpiness
 
-            reward += -0.02 * d_holes - 0.1 * d_bump
+        #     reward += -0.02 * d_holes - 0.1 * d_bump
 
-            self.last_holes = holes
-            self.last_bumpiness = bumpiness
+        #     self.last_holes = holes
+        #     self.last_bumpiness = bumpiness """
 
-        if action == 6:  # swap
-            reward -= 0.5
-        if action == 7:  # no action
-            reward += 0.02
+        # if action == 6:  # swap
+        #     reward -= 0.1
 
-        return obs, reward, term, trun, info
+        # if action == 5:  # no action
+        #     reward += 0.02
+
+        return obs, np.float32(reward), term, trun, info
