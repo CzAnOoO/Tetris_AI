@@ -70,7 +70,7 @@ class MyReward(gym.Wrapper):
             # self.prev_bumpiness = bumpiness
             self.prev_holes = holes
             if d_holes == 0:
-                reward += 0.8
+                reward += 0.01
             # print("0 delta hole")
 
             # print("delta hole: ", d_holes)

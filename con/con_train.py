@@ -7,10 +7,10 @@ vec_env = make_vec_env(lambda: tetris_env.make_env(render=False, obs_size=16), n
 
 model = PPO.load("con/model/PPO_01_5_2_1_1", vec_env)
 # (alife=0.05, game_over=-10)
-# PPO{obs_size}_{T-steps}_{d_holes==0 -> +0.a}_{-0.b * d_holes} _{clear_line^c * 1 + 1}_{-0.d * d_height}
+# PPO{obs_size}_{T-steps}_{d_holes==0 -> +0.a}_{-0.b * d_holes} _{clear_line^c * 1 + 1}_{-0.d * d_height}_{-0.0e * d_bump}
 model.learn(
     total_timesteps=50_000_000,
-    tb_log_name="con/log/PPO_01_5_2_1_1",
+    tb_log_name="PPO_01_5_2_1_1",
     reset_num_timesteps=False,
 )
 model.save("con/model/PPO_01_5_2_1_1")
