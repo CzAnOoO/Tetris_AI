@@ -64,8 +64,9 @@ class MyReward(gym.Wrapper):
             d_bump = bumpiness - self.prev_bumpiness
             d_height = max_height - self.prev_max_height
 
-            # reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
-            reward += -0.5 * d_holes - 0.01 * d_height - 0.03 * d_bump
+            if max_height > 10 / 20:
+                reward += -0.01 * max_height  # - 0.005 * holes - 0.001 * bumpiness
+            reward += -0.5 * d_holes - 0.05 * d_bump  # - 0.01 * d_height
             # self.prev_max_height = max_height
             # self.prev_bumpiness = bumpiness
             self.prev_holes = holes
