@@ -8,4 +8,4 @@ if __name__ == "__main__":
     # PPO16_10M_01_5_2_1
     model = PPO.load("models_con/PPO22_8_5_2_1_3")
 
-    tetris_env.play(env, agent=model, delay=1, episodes=10, render=True)
+    tetris_env.play(env, agent=model, delay=1, episodes=100, render=True)
