@@ -42,7 +42,7 @@ class MyReward(gym.Wrapper):
         lines_cleared = info.get("lines_cleared", 0)
         if lines_cleared > 0:
             # reward /= 10
-            reward += (lines_cleared**2) * 1  # + 1
+            reward += (lines_cleared**2) * 1 + 2
             # print("lines_creared: ", lines_cleared)
 
         """
@@ -62,15 +62,15 @@ class MyReward(gym.Wrapper):
             # delta (have all been divided by 20 in the observation function)
             d_holes = holes - self.prev_holes
             d_bump = bumpiness - self.prev_bumpiness
-            # d_height = max_height - self.prev_max_height
+            d_height = max_height - self.prev_max_height
 
             # reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
-            reward += -0.5 * d_holes  # - 0.005 * d_bump
+            reward += -0.5 * d_holes - 0.01 * d_height - 0.01 * d_bump
             # self.prev_max_height = max_height
             # self.prev_bumpiness = bumpiness
             self.prev_holes = holes
             if d_holes == 0:
-                reward += 0.01
+                reward += 0.8
             # print("0 delta hole")
 
             # print("delta hole: ", d_holes)
@@ -92,8 +92,8 @@ class MyReward(gym.Wrapper):
         #     self.last_holes = holes
         #     self.last_bumpiness = bumpiness """
 
-        # if action == 6:  # swap
-        #     reward -= 0.1
+        if action == 6:  # swap
+            reward -= 0.05
 
         # if action == 5:  # no action
         #     reward += 0.02
