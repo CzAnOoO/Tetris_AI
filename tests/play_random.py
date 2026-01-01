@@ -2,7 +2,7 @@ import cv2
 from envs import tetris_env
 
 if __name__ == "__main__":
-    env = tetris_env.make_env(True, 42, obs_size=16)
+    env = tetris_env.make_env(True, 42, obs_size=22)
 
     terminated = False
     last_score = 0
@@ -14,7 +14,7 @@ if __name__ == "__main__":
         # print(info.get("lines_cleared", 0))
         if reward != 0:
             print(reward)
-        # print(observation[15])
+        print(observation)
         current_score = info.get("lines_cleared", 0)
         if current_score != last_score:
             print("Score:", current_score)

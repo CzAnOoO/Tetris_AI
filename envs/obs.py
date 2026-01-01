@@ -25,7 +25,7 @@ class ExtendObservation(gym.ObservationWrapper):
         id_index = active_tetromino.id  # 2 - 8 = 7 st
         # matrix = active_tetromino.matrix
         id = np.zeros(7)
-        id[id_index - 2]
+        id[id_index - 2] = 1
 
         xy = [x / 10.0, y / 20.0]
         id_val = [(id_index - 2) / 6]

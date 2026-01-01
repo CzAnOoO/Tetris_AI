@@ -65,12 +65,12 @@ class MyReward(gym.Wrapper):
             d_height = max_height - self.prev_max_height
 
             # reward += -0.001 * max_height - 0.005 * holes - 0.001 * bumpiness
-            reward += -0.5 * d_holes - 0.01 * d_height - 0.01 * d_bump
+            reward += -0.5 * d_holes - 0.01 * d_height - 0.03 * d_bump
             # self.prev_max_height = max_height
             # self.prev_bumpiness = bumpiness
             self.prev_holes = holes
             if d_holes == 0:
-                reward += 0.01
+                reward += 0.8
             # print("0 delta hole")
 
             # print("delta hole: ", d_holes)
@@ -93,9 +93,9 @@ class MyReward(gym.Wrapper):
         #     self.last_bumpiness = bumpiness """
 
         if action == 6:  # swap
-            reward -= 0.05
+            reward -= 0.1
 
-        # if action == 5:  # no action
-        #     reward += 0.02
+        if action == 5:  # drop
+            reward += 0.02
 
         return obs, np.float32(reward), term, trun, info
