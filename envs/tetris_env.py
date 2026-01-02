@@ -29,11 +29,13 @@ def make_env(render=False, seed=None, obs_size=16):
 
 def play(env, agent=None, delay=100, episodes=1, render=False):
     scores = []
+    lines = []
     for episode in range(episodes):
         obs, info = env.reset()
         terminated = False
         truncated = False
         current_game_score = 0
+        current_cleared_lines = 0
 
         while not (terminated or truncated):
             if render:
@@ -45,15 +47,19 @@ def play(env, agent=None, delay=100, episodes=1, render=False):
 
             lines_cleared = info.get("lines_cleared", 0)
             if lines_cleared != 0:
-                current_game_score += lines_cleared
+                current_game_score += lines_cleared**2
+                current_cleared_lines += lines_cleared
             #     print("Lines cleared: ", lines_cleared)
 
         # print("Game Over!")
         scores.append(current_game_score)
+        lines.append(current_cleared_lines)
 
     mean_score = np.mean(scores)
+    mean_lines = np.mean(lines)
     print("episodes: ", episodes)
     print("avg score: ", mean_score)
+    print("avg cleared: ", mean_lines)
 
 
 # if __name__ == "__main__":
