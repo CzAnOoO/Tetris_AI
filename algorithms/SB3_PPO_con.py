@@ -3,7 +3,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 
 # Parallel environments
-vec_env = make_vec_env(lambda: tetris_env.make_env(render=False, obs_size=22), n_envs=8)
+vec_env = make_vec_env(lambda: tetris_env.make_env(render=False, obs_size=26), n_envs=8)
 
 model = PPO.load("models_con/PPO22_8_5_2_1_3_coef1", vec_env)
 # (alife=0.05, game_over=-10)

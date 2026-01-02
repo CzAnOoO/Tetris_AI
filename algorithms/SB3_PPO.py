@@ -4,7 +4,7 @@ from stable_baselines3.common.env_util import make_vec_env
 
 log_dir = "logs_con"
 # Parallel environments
-vec_env = make_vec_env(lambda: tetris_env.make_env(render=False, obs_size=22), n_envs=8)
+vec_env = make_vec_env(lambda: tetris_env.make_env(render=False, obs_size=26), n_envs=8)
 
 model = PPO(
     "MlpPolicy",

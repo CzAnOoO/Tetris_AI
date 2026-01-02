@@ -42,7 +42,7 @@ class MyReward(gym.Wrapper):
         lines_cleared = info.get("lines_cleared", 0)
         if lines_cleared > 0:
             # reward /= 10
-            reward += (lines_cleared**2) * 1 + 2
+            reward += (lines_cleared**2) + 1
             # print("lines_creared: ", lines_cleared)
 
         """
@@ -93,8 +93,8 @@ class MyReward(gym.Wrapper):
         #     self.last_holes = holes
         #     self.last_bumpiness = bumpiness """
 
-        if action == 6:  # swap
-            reward -= 0.1
+        #if action == 6:  # swap
+        #    reward -= 0.1
 
         if action == 5:  # drop
             reward += 0.01
