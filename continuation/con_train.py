@@ -16,8 +16,8 @@ model.learn(
 model.save("continuation/model/PPO22_3_6_2_0_3_2")
 
 """ 
-uv run python -m con.con_train
-tensorboard --logdir=con/log
+uv run python -m continuation.con_train
+tensorboard --logdir=continuation/log
 
  """
 

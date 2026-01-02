@@ -6,6 +6,6 @@ if __name__ == "__main__":
     env = tetris_env.make_env(True, obs_size=22)
     # model = DQN.load("models/dqn_my_plz")
     # PPO16_10M_01_5_2_1
-    model = PPO.load("continuation/model/PPO22_3_6_2_0_3_2")
+    model = PPO.load("models_con/PPO22_8_5_2_0_5_1")
 
     tetris_env.play(env, agent=model, delay=1, episodes=10, render=True)
