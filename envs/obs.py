@@ -48,12 +48,14 @@ class ExtendObservation(gym.ObservationWrapper):
 
         # infer rotation
         rotation = self._infer_rotation(root)
-        rotation_onehot = np.eye(4)[rotation]     # length 4
+        rotation_onehot = np.eye(4)[rotation]  # length 4
 
         xy = [x / 10.0, y / 20.0]
         id_val = [(id_index - 2) / 6]
         if self.obs_size == 26:
             pieces = [basic / 20.0, xy, id, rotation_onehot]
+        elif self.obs_size == 22:
+            pieces = [basic / 20.0, xy, id]
         elif self.obs_size == 16:
             pieces = [basic / 20.0, xy, id_val]
         elif self.obs_size == 32:
